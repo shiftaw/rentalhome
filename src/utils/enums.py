@@ -49,7 +49,7 @@ class Error(Enum):
                            'https://github.com/Michele0303/tiktok-live-recorder/blob/main/GUIDE.md#how-to-set-cookies'
 
     CONNECTION_CLOSED = "Connection broken by the server."
-    CONNECTION_CLOSED_AUTOMATIC = f"{CONNECTION_CLOSED}. Try again after Delay of {TimeOut.CONNECTION_CLOSED} minutes"
+    CONNECTION_CLOSED_AUTOMATIC = f"{CONNECTION_CLOSED}. Try again after delay of {TimeOut.CONNECTION_CLOSED} minutes"
 
 
 class TikTokError(Enum):
@@ -101,12 +101,10 @@ class Info(Enum):
         return iter(self.value)
 
     NEW_FEATURES = [
-        "Improved codebase",
-        "Resolved lag-related issues causing video splitting: recording now continues seamlessly into a single file even during stream interruptions or lagging",
-        "Fixed issue where enums_tempy.py was not being deleted correctly",
+        "Fix bugs"
     ]
 
-    VERSION = 5.5
+    VERSION = 5.8
     BANNER = fr"""
 
   _____ _ _   _____    _     _    _           ___                   _         

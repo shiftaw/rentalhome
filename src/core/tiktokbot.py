@@ -2,6 +2,9 @@ import json
 import os
 import re
 import time
+from http.client import HTTPException
+
+from requests import RequestException
 
 from utils.logger_manager import logger
 from core.video_management import VideoManagement
@@ -107,9 +110,12 @@ class TikTok:
                 logger.info(f"Waiting {TimeOut.AUTOMATIC_MODE} minutes before recheck\n")
                 time.sleep(TimeOut.AUTOMATIC_MODE * TimeOut.ONE_MINUTE)
 
-            except ConnectionAbortedError:
+            except ConnectionError:
                 logger.error(Error.CONNECTION_CLOSED_AUTOMATIC)
                 time.sleep(TimeOut.CONNECTION_CLOSED * TimeOut.ONE_MINUTE)
+
+            except Exception as ex:
+                logger.error(f"Unexpected error: {ex}\n")
 
     def start_recording(self):
         """
@@ -137,24 +143,37 @@ class TikTok:
 
         logger.info("[PRESS CTRL + C ONCE TO STOP]")
         with open(output, "wb") as out_file:
-            while True:
-
-                if not self.is_user_in_live():
-                    logger.info("User is no longer live. Stopping recording.")
-                    break
-
+            stop_recording = False
+            while not stop_recording:
                 try:
+                    if not self.is_user_in_live():
+                        logger.info("User is no longer live. Stopping recording.")
+                        break
+
                     response = self.httpclient.get(live_url, stream=True)
                     start_time = time.time()
                     for chunk in response.iter_content(chunk_size=4096):
                         out_file.write(chunk)
                         elapsed_time = time.time() - start_time
                         if self.duration is not None and elapsed_time >= self.duration:
+                            stop_recording = True
                             break
+
+                except ConnectionError:
+                    if self.mode == Mode.AUTOMATIC:
+                        logger.error(Error.CONNECTION_CLOSED_AUTOMATIC)
+                        time.sleep(TimeOut.CONNECTION_CLOSED * TimeOut.ONE_MINUTE)
+
+                except (RequestException, HTTPException):
+                    time.sleep(2)
 
                 except KeyboardInterrupt:
                     logger.info("Recording stopped by user.")
-                    break
+                    stop_recording = True
+
+                except Exception as ex:
+                    logger.error(f"Unexpected error: {ex}\n")
+                    stop_recording = True
 
         logger.info(f"Recording finished: {output}\n")
 
