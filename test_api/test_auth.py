@@ -1,6 +1,6 @@
 import requests
 
-url = "http://127.0.0.1:8000/auth"
+url = "https://rentalhome-i7wr.onrender.com/auth"
 
 new_user1 = {
     "email": "test@gmail.com",
@@ -17,10 +17,10 @@ new_user = {
 
 # Headers (Ensure JSON format)
 headers = {"Content-Type": "application/json"}
-# print(requests.post(f'{url}/register', json=new_user).json())
+print(requests.post(f'{url}/register', json=new_user).json())
 # print(requests.get(f'{url}/test').json())
 
 
 # Login Daniel
 data = {"email": "test@gmail.com", "password": "password"}
-print(requests.post(f"{url}/login", json=data).json())
+#print(requests.post(f"{url}/login", json=data).json())
