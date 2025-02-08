@@ -3,7 +3,9 @@ import os
 import logging
 
 # Configure Logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 # Load MongoDB URI from environment variables
@@ -14,7 +16,6 @@ try:
     # Connect to MongoDB
     client = MongoClient(MONGO_URI)
     db = client[DATABASE_NAME]
-    
     # Log Success Message
     logger.info(f"✅ Connected to MongoDB at {MONGO_URI}")
 except Exception as e:
