@@ -8,12 +8,17 @@ message = {
     "content": "test mesage"
 }
 
-url = 'http://localhost:8000/messages/messages?token='
+url = 'http://localhost:8000/messages/messages'
 
 # Send message to daniel
-#print(requests.post(f'{url}{samra_access_token}',json=message,).json()) 
+#print(requests.post(f'{url}?token={samra_access_token}',json=message,).json()) 
+
+#delete message
+message_id="679e8ef6a037d7f53e2d6ffa"
+#print(requests.delete(f'{url}/{message_id}?token={samra_access_token}').json())
 
 # read daniel messages
 
-print(requests.get(f'{url}{daniel_token}').json())
+print(requests.get(f'{url}?token={daniel_token}').json())
+
 

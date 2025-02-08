@@ -20,7 +20,6 @@ try:
 except Exception as e:
     logger.error(f"❌ Failed to connect to MongoDB: {str(e)}")
     raise e
-db = client["houserent"]
 users_collection = db["users"]
 properties_collection = db["properties"]
 bookings_collection = db["bookings"]

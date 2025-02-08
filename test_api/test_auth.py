@@ -12,6 +12,8 @@ headers = {
 #print(requests.post(f'{url}/register', json=new_user).json())
 #print(requests.get(f'{url}/test').json())
 
+
+# Login Daniel 
 data = {
     "email": "test@gmail.com",
     "password": "password" }
