@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
-from database import users_collection
-from utils.auth import hash_password, verify_password, create_jwt_token
 from pydantic import BaseModel
+
+from database import users_collection
+from fastapi import APIRouter, Depends, HTTPException
+from utils.auth import create_jwt_token, hash_password, verify_password
 
 router = APIRouter()
 

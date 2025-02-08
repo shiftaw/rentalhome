@@ -1,7 +1,7 @@
+from database import client  # MongoDB Connection
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import auth, message  # properties, bookings, payments, messages
-from database import client  # MongoDB Connection
 
 # Initialize FastAPI App
 app = FastAPI(title="House Rent API", version="1.0")

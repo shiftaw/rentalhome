@@ -1,6 +1,7 @@
-from pymongo import MongoClient
-import os
 import logging
+import os
+
+from pymongo import MongoClient
 
 # Configure Logging
 logging.basicConfig(

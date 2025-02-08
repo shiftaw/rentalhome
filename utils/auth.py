@@ -1,7 +1,8 @@
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
-import jwt
 import os
+from datetime import datetime, timedelta
+
+import jwt
+from passlib.context import CryptContext
 
 # Load secret key from .env or default
 SECRET_KEY = os.getenv("SECRET_KEY", "your_secret_key")

@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from database import properties_collection
 from bson import ObjectId
+from pydantic import BaseModel
+
+from database import properties_collection
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
 
