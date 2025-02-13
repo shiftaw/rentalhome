@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 
 # Load MongoDB URI from environment variables
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-print('MONGO_URI ', MONGO_URI)
+#print('MONGO_URI ', MONGO_URI)
 DATABASE_NAME = "houserent"
 
 try:
     # Connect to MongoDB
-    client = MongoClient(MONGO_URI)
+    client = MongoClient(MONGO_URI,tls=True)
     db = client[DATABASE_NAME]
     # Log Success Message
     logger.info(f"✅ Connected to MongoDB at {MONGO_URI}")
