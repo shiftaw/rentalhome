@@ -17,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Load MongoDB URI from environment variables
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017",tlsCAFile=ca)
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 #print('MONGO_URI ', MONGO_URI)
 DATABASE_NAME = "houserent"
 
