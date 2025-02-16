@@ -7,4 +7,3 @@ gunicorn
 pymongo
 pyjwt
 python-dotenv
-certifi
