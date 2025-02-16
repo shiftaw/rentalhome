@@ -3,6 +3,8 @@ import os
 
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import certifi
+ca = certifi.where()
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Load MongoDB URI from environment variables
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017",tlsCAFile=ca)
 #print('MONGO_URI ', MONGO_URI)
 DATABASE_NAME = "houserent"
 
