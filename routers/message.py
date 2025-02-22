@@ -41,6 +41,8 @@ def send_message(message: MessageCreate, user: dict = Depends(get_current_user))
 # 2️⃣ Get Messages for Current User
 @router.get("/messages")
 def get_messages(user: dict = Depends(get_current_user)):
+    print('user',user)
+
     user_messages = list(
         messages_collection.find(
             {

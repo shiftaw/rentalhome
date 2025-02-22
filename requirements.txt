@@ -7,3 +7,5 @@ gunicorn
 pymongo
 pyjwt
 python-dotenv
+python-dotenv
+
