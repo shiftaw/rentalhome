@@ -5,18 +5,25 @@ import Login from './components/Login'
 import BookingPage from './components/BookingPage'
 import ReviewPage from './components/ReviewPage'
 import NavBar from './components/NavBar'
+import AuthContextProvider from './context/authContext'
+import CreateRentalProperty from './pages/CreateRentalProperty'
 
 function App() {
   return (
-    <Router cla>
-      <NavBar />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/book/:id' element={<BookingPage />} />
-        <Route path='/reviews/:id' element={<ReviewPage />} />
-      </Routes>
-    </Router>
+    <AuthContextProvider>
+      <Router cla>
+        <Login />
+        <NavBar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/new_property' element={<CreateRentalProperty />} />
+
+          <Route path='/login' element={<Login />} />
+          <Route path='/book/:id' element={<BookingPage />} />
+          <Route path='/reviews/:id' element={<ReviewPage />} />
+        </Routes>
+      </Router>
+    </AuthContextProvider>
   )
 }
 
