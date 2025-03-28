@@ -1,6 +1,6 @@
 import requests
 from auth import logging
-from data import new_user, new_user1,message_url
+from data import new_user, new_user1, message_url
 
 daniel_id = "679e681a3b1402b60d920c80"
 samra_access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdhN2NiYWY5YzdjZjdiZmIxNDc0NTkxIiwiZXhwIjoxNzM5NzA2OTE4fQ.p8boH3Sw3gBo4TetBylqSYJsYDJf7lxmkH7J3C85Llw"
@@ -20,5 +20,3 @@ message_id = "679e8ef6a037d7f53e2d6ffa"
 # read daniel messages
 
 print(requests.get(f"{url}?token={samra_access_token}").json())
-
-

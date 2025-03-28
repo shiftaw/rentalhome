@@ -14,6 +14,7 @@ class PropertyCreate(BaseModel):
     price: float
     location: str
     images: list[str]
+    city: str
 
 
 @router.post("/properties")

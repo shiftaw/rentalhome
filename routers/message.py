@@ -19,13 +19,17 @@ class MessageCreate(BaseModel):
 # Middleware: Get Current User from JWT
 def get_current_user(token: str = Depends(decode_jwt_token)):
     if not token:
-        raise HTTPException(status_code=401, detail="Invalid token or expired session")
+        raise HTTPException(
+            status_code=401, detail="Invalid token or expired session"
+        )
     return token
 
 
 # 1️⃣ Send a Message
 @router.post("/messages")
-def send_message(message: MessageCreate, user: dict = Depends(get_current_user)):
+def send_message(
+    message: MessageCreate, user: dict = Depends(get_current_user)
+):
     new_message = {
         "sender_id": user["user_id"],
         "receiver_id": message.receiver_id,
@@ -41,7 +45,7 @@ def send_message(message: MessageCreate, user: dict = Depends(get_current_user))
 # 2️⃣ Get Messages for Current User
 @router.get("/messages")
 def get_messages(user: dict = Depends(get_current_user)):
-    print('user',user)
+    print("user", user)
 
     user_messages = list(
         messages_collection.find(
