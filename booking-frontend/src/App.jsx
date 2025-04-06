@@ -17,6 +17,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/new_property' element={<CreateRentalProperty />} />
+          <Route
+            path='/detail/:id'
+            element={<div>Apartment for rent</div>}
+          ></Route>
 
           <Route path='/login' element={<Login />} />
           <Route path='/book/:id' element={<BookingPage />} />

@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+include = '\.pyi?$'
+exclude = 'migrations|__pycache__|\.venv|build|dist'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+include_trailing_comma = true
+multi_line_output = 3
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+known_first_party = ["myapp"]  # replace with your actual module name
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+select = ["E", "F", "W", "B", "I"]  # E/F/W=basic lints, B=bugbear, I=import order
+ignore = ["E203", "E501"]  # Ignore conflicts with black
+exclude = ["migrations", "__pycache__", ".venv", "build", "dist"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # ignore unused imports in __init__.py
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

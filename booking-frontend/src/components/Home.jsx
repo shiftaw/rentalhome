@@ -93,14 +93,15 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className='grid grid-cols-1 gap-4 px-2 sm:grid-cols-2 sm:px-8 sm:p-4 sm:gap-4 lg:grid-cols-4 lg:px-32'>
+      <div className='grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-8 sm:p-4 sm:gap-4 lg:grid-cols-4 lg:px-32'>
         {properties.map((ad) => {
           return <AddItem {...ad}></AddItem>
         })}
       </div>
-      <div className='py-16'>
-        <div>test</div>
-      </div>
+      <div className='py-1'></div>
+      <footer>
+        <div className='bg-[#202020] py-16 text-white'>Footer</div>
+      </footer>
     </div>
   )
 }

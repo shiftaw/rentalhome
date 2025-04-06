@@ -1,16 +1,17 @@
-from database import client  # MongoDB Connection
+import time
+
+from starlette.responses import JSONResponse
+
 from fastapi import FastAPI, Request
-from starlette.responses import Response,JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from routers import (
+from routers import (  # properties, bookings, payments, messages
     auth,
     message,
     rent,
-)  # properties, bookings, payments, messages
+)
 
 # Initialize FastAPI App
 from utils.logger import logger
-import time
 
 app = FastAPI(title="House Rent API", version="1.0")
 
@@ -38,9 +39,9 @@ async def log_requests(request: Request, call_next):
 
 
 @app.exception_handler(Exception)
-async def global_exception(req:Request,wxc:Exception):
-    logger.error(f"Unhandled exception")
-    return JSONResponse(status_code=500,content={"message":"Internal server error"})
+async def global_exception(req: Request, wxc: Exception):
+    logger.error("Unhandled exception")
+    return JSONResponse(status_code=500, content={"message": "Internal server error"})
 
 
 app.add_middleware(

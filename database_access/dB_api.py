@@ -1,9 +1,10 @@
-from database_access.base_db import BaseDb
-from pymongo.collection import Collection
-from utils.logger import logger
-
 import json
+
 from bson import ObjectId  # bson = binary JSON, the data format used by MongoDB
+from pymongo.collection import Collection
+
+from database_access.base_db import BaseDb
+from utils.logger import logger
 
 
 class MyJSONEncoder(json.JSONEncoder):
@@ -32,9 +33,9 @@ class Db_api(BaseDb):
     def insert_one(self, item):
         result = self.collection.insert_one(item)
         if result.inserted_id:
-            logger.info("✅  Database insert success %s ",result.inserted_id)
+            logger.info("✅  Database insert success %s ", result.inserted_id)
         else:
-            logger.error("Database insert failed %s",result)
+            logger.error("Database insert failed %s", result)
         return result.inserted_id
 
     def delete_multiple(

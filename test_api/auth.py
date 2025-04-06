@@ -1,4 +1,5 @@
 import logging
+
 import requests
 from data import login_url, register_url
 

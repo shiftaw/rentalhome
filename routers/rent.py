@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
-from bson import ObjectId, json_util
+from bson import ObjectId
 from pydantic import BaseModel
+
 from database import rent_collection
-from utils.logger import logger
 from database_access.dB_api import Db_api
+from fastapi import APIRouter
+from utils.logger import logger
 
 router = APIRouter()
 db_api = Db_api(rent_collection)

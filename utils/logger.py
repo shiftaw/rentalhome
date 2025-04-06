@@ -1,5 +1,6 @@
 import logging
-from colorama import init, Fore, Back
+
+from colorama import Back, Fore, init
 
 init(autoreset=True)
 
@@ -11,7 +12,7 @@ class ColorFormatter(logging.Formatter):
         "ERROR": Fore.RED + Back.WHITE,
         "DEBUG": Fore.BLUE,
         "INFO": Fore.WHITE,
-        "CRITICAL": Fore.RED + Back.WHITE
+        "CRITICAL": Fore.RED + Back.WHITE,
     }
 
     def format(self, record):
@@ -22,6 +23,7 @@ class ColorFormatter(logging.Formatter):
             record.msg = color + str(record.msg)
         return logging.Formatter.format(self, record)
 
+
 class ColorLogger(logging.Logger):
     def __init__(self, name):
         logging.Logger.__init__(self, name, logging.DEBUG)
@@ -30,7 +32,7 @@ class ColorLogger(logging.Logger):
         console.setFormatter(color_formatter)
         self.addHandler(console)
 
+
 logging.setLoggerClass(ColorLogger)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-

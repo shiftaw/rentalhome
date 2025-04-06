@@ -1,8 +1,8 @@
+from bson import ObjectId
 from pydantic import BaseModel
+
 from database import bookings_collection
 from fastapi import APIRouter
-from bson import ObjectId
-
 
 router = APIRouter()
 
