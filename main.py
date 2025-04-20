@@ -60,7 +60,7 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
 app.include_router(message.router, prefix="/messages", tags=["Messages"])
 app.include_router(rent.router, prefix="/api/rent", tags=["Rent"])
-app.include_router(rent.router, prefix="/api/record", tags=["Rent"])
+app.include_router(record.router, prefix="/api/record", tags=["Rent"])
 
 
 # Root Endpoint (Health Check)

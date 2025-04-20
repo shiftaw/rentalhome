@@ -5,7 +5,8 @@ passlib
 uvicorn
 gunicorn
 pymongo
-pyjwt
+PyJWT>=2.8.0
 python-dotenv
 python-dotenv
+colorama>=0.4.6
 
