@@ -2,26 +2,34 @@ from pydantic import BaseModel
 
 
 class PropertyModel(BaseModel):
-    title: str
-    description: str
-    price: float
-    images: list[str]
-    city: str
-    street_name: str
-    postal_code: str
-    category: str
-    rooms: float
-    size_m2: float
-    monthly_rent: float
-    monthly_rent_currency: str
-    monthly_rent_extra_costs: float
-    prepaid_rent: float
-    deposit: float
-    deposit_currency: str
-    location: {"lat": float, "lng": float}
-    ad_phone_number: str
-    state: str
-    floor: int
-    rental_period: str
-    available_from: str
-    is_contactable_via_message: bool
+
+    title:str
+    rooms:int
+    area:int
+    month_rent:int
+    deposit:int = 0
+    prepaid_rent:int
+    sharable:bool = False
+    pets_allowed:bool = False
+    senior_friendly:bool = False
+    for_student_only:bool = False
+    for_single_only:bool = False
+    for_family_only:bool = False
+    elevator:bool= False
+    parking:bool= False
+    balcony:bool= False
+    charging_station:bool= False
+    dishwasher:bool= False
+    washing_machine:bool= False
+    tumbler_dryer:bool= False
+    refrigerator:bool= False
+    furnished:bool= False
+    digital_display:bool= False
+    message_via_app:bool= False
+    telephone_contact:bool= False
+    telephone_number:str = ""
+    description:str
+    rent_period:str
+    available_from:str
+    
+    

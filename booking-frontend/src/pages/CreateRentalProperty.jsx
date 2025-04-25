@@ -6,9 +6,14 @@ import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import axios from 'axios'
 import React, { useState } from 'react'
+import { Label } from '@/components/ui/label'
+import SelectorWithLabel from '@/components/SelectorWithLable'
 import { data } from 'react-router-dom'
+import MultiImageUploader from '@/components/MultiImageUploader'
 
 export default function CreateRentalProperty() {
+  const [images, setImages] = useState([])
+  const [previews, setPreviews] = useState([])
   const [newRent, setNewRent] = useState({
     title: '',
     rooms: '',
@@ -20,8 +25,6 @@ export default function CreateRentalProperty() {
     pets_allowed: false,
     senior_friendly: false,
     for_student_only: false,
-    for_family: false,
-    for_single: false,
     elevator: false,
     parking: false,
     balcony: false,
@@ -36,29 +39,36 @@ export default function CreateRentalProperty() {
     telephone_contact: false,
     telephone_number: '',
     description: '',
+    rent_period: '1 year',
+    available_from: '',
   })
   const onValueChange = (name) => (e) => {
     let value = e
+    console.log(e, typeof e)
+
     if (typeof e === 'object') {
       value = e.target.value
     }
     setNewRent({ ...newRent, [name]: value })
   }
+
+  const handleDatePicked = (date) => {
+    setNewRent((prev) => ({ ...prev, available_from: date }))
+  }
   const onSubmit = () => {
     console.log(newRent)
-    const data = {
-      title: newRent.title,
-      description: 'newRent.description',
-      rooms: newRent.rooms,
-      area: newRent.area,
-      month_rent: newRent.month_rent,
-      prepaid_rent: newRent.prepaid_rent,
-      deposit: newRent.deposit,
-      status: 'draft',
-    }
+    const formData = new FormData()
+    Object.keys(newRent).map((v) => {
+      formData.append(v, newRent[v])
+    })
+    images.map((v) => {
+      formData.append('images', v)
+    })
     axios
-      .post('/api/rent/create', JSON.stringify(newRent), {
-        headers: { 'Content-Type': 'application/json' },
+      .post('/api/rent/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Don't set this manually, Axios will do it automatically
+        },
       })
       .then((data) => {
         console.log(data)
@@ -69,7 +79,7 @@ export default function CreateRentalProperty() {
       className='flex flex-col items-center gap-2 bg-white '
       style={{ background: 'rgb(247, 247, 247)' }}
     >
-      <div className='py-16  max-w-md bg-white border px-4'>
+      <div className='pt-16 pb-8  max-w-md bg-white border px-4'>
         <div className='flex gap-4'>
           <InputWithLabel
             label='Rooms'
@@ -116,8 +126,29 @@ export default function CreateRentalProperty() {
         <div className='flex pt-8 '>
           <Select />
         </div>
-        <div className='flex pt-8 '>
-          <DatePicker />
+        <div className='flex flex-col pt-8 '>
+          <Label htmlFor='inp' className='font-thin pb-2 '>
+            Available from {<span className='text-red-600'>*</span>}
+          </Label>
+          <DatePicker onValueChange={handleDatePicked} />
+        </div>
+        <div className='py-4'>
+          <SelectorWithLabel
+            options={[
+              '< 3 Months',
+              '3 Months',
+              '6 Months',
+              '1 year',
+              '2 years',
+              '3 years',
+              'Unlimited',
+            ]}
+            onValueChange={onValueChange('rent_period')}
+            label={'Rent period'}
+            value={''}
+            placeholder='Select period'
+            important
+          ></SelectorWithLabel>
         </div>
         <div className='flex flex-col gap-2 pt-8'>
           <div className='font-bold'> LifeStyle</div>
@@ -212,11 +243,22 @@ export default function CreateRentalProperty() {
             important
           ></InputWithLabel>
         </div>
-        <div className='flex pt-8 '>
+        <div className='flex pt-8  flex-col'>
+          <Label className='font-thin py-2'>
+            Description<span className='w-[1px] text-red-600'>*</span>
+          </Label>
           <Textarea
             value={newRent.description}
             onChange={onValueChange('description')}
           />
+        </div>
+        <div className='pt-8'>
+          <MultiImageUploader
+            setImages={setImages}
+            setPreviews={setPreviews}
+            previews={previews}
+            images={images}
+          ></MultiImageUploader>
         </div>
         <div className='flex pt-8 flex-col'>
           <div>Display(option)</div>
@@ -233,7 +275,7 @@ export default function CreateRentalProperty() {
             <CheckBoxWithLabel
               checked={newRent.message_via_app}
               border={false}
-              label='Messages via BoligPortal'
+              label='Messages via Shola'
               onChange={onValueChange('message_via_app')}
             />
           </div>
@@ -246,7 +288,7 @@ export default function CreateRentalProperty() {
             />
           </div>
         </div>
-        <div className='flex gap-2'>
+        <div className='flex gap-2 mt-4'>
           <Button variant='secondary' className='w-max-sm w-full rounded'>
             Save draft
           </Button>

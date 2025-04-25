@@ -1,28 +1,93 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
+import { useParams } from 'react-router'
 import { Button } from '../components/ui/button'
+import axios from 'axios'
+
+/*title: '',
+    rooms: '',
+    area: '',
+    month_rent: '',
+    deposit: '',
+    prepaid_rent: '',
+    sharable: false,
+    pets_allowed: false,
+    senior_friendly: false,
+    for_student_only: false,
+    elevator: false,
+    parking: false,
+    balcony: false,
+    charging_station: false,
+    dishwasher: false,
+    washing_machine: false,
+    tumbler_dryer: false,
+    refrigerator: false,
+    furnished: false,
+    digital_display: false,
+    message_via_app: false,
+    telephone_contact: false,
+    telephone_number: '',
+    description: '',
+    rent_period: '1 year',
+    available_from: '',*/
 
 const list = [
-  { key: 'Monthly rent', value: '200 USD' },
-  { key: 'Available from', value: 'July 20,2025' },
-  { key: 'Rental period', value: 'Two years' },
+  { label: 'Monthly rent', value: '200 USD', key: 'month_rent' },
+  { label: 'Available from', value: 'July 20,2025', key: 'available_from' },
+  { label: 'Rental period', value: 'Two years', key: 'rent_period' },
 ]
 
 const list2 = [
-  { key: 'Housing type', value: '200Usd' },
-  { key: 'Size', value: '140 m²' },
-  { key: 'Rooms', value: 'Two years' },
-  { key: 'Floor', value: '_' },
-  { key: 'Furnished', value: 'No' },
-  { key: 'Elevator', value: 'Yes' },
-  { key: 'Balcony/ terrace', value: 'No' },
-  { key: 'Parking', value: 'Yes' },
-  { key: 'Dishwasher', value: 'No' },
-  { key: 'Washing machine', value: 'No' },
-  { key: 'Tumbler dryer', value: 'No' },
+  { label: 'Monthly rent', value: '200Usd', key: 'month_rent' },
+  { label: 'Size', value: '140 m²', key: 'area' },
+  { label: 'Rooms', value: 'Two years', key: 'rooms' },
+  { label: 'Floor', value: '_', key: 'furnished' },
+  { label: 'Furnished', value: 'No', key: 'furnished' },
+  { label: 'Elevator', value: 'Yes', key: 'elevator' },
+  { label: 'Balcony/ terrace', value: 'No', key: 'balcony' },
+  { label: 'Parking', value: 'Yes', key: 'parking' },
+  { label: 'Dishwasher', value: 'No', key: 'dishwasher' },
+  { label: 'Washing machine', value: 'No', key: 'washing_machine' },
+  { label: 'Tumbler dryer', value: 'No', key: 'tumbler_dryer' },
 ]
 
 export default function RentDetail() {
+  let params = useParams()
+  const [detail, setDetail] = useState(null)
+
+  const fetch_data = async (id) => {
+    try {
+      const response = await axios.get(`/api/rent/detail/${id}`)
+      console.log(JSON.parse(response.data))
+      setDetail(JSON.parse(response.data))
+    } catch (error) {
+      console.error('There was an error fetching the properties!', error)
+    }
+  }
+
+  const getValue = (key) => {
+    if (detail == null) return null
+    const value = detail[key]
+
+    if (key === 'available_from') {
+      return new Date(value).toDateString()
+    }
+
+    if (typeof value == 'boolean') {
+      console.log({ value })
+      if (value) {
+        return 'Yes'
+      } else {
+        return 'No'
+      }
+    }
+    return value
+  }
+
+  useEffect(() => {
+    const id = params.id
+    fetch_data(id)
+  }, [])
   const showList = (item, border = false) => {
     return (
       <div
@@ -32,8 +97,8 @@ export default function RentDetail() {
           'py-2 border-[#eaeaea]'
         )}
       >
-        <span>{item.key}</span>
-        <span className='font-bold'>{item.value}</span>
+        <span>{item.label}</span>
+        <span className='font-bold'>{getValue(item.key)}</span>
       </div>
     )
   }
@@ -45,7 +110,7 @@ export default function RentDetail() {
       <div className='max-w-md bg-["rgb(247,247,247)"] border pb-16'>
         <img src='/img/detail.png'></img>
 
-        <div className='py-2 px-4'>
+        <div className='py-2 px-4 mb-8'>
           <div className='text-[#545454]'>7. april</div>
           <div className='pb-0 pt-3 font-bold text-xl text-[#1f1f1f]'>
             4 bedroom hus på 140 m²
@@ -63,7 +128,7 @@ export default function RentDetail() {
         <div className='flex flex-col'>
           <div className='text-[12px] text-[#808080]'>Monthly rent</div>
           <div className='text-[28px] font-bold'>
-            8000 <span className='text-[12px]'>USD</span>
+            {getValue('month_rent')} <span className='text-[12px]'>USD</span>
           </div>
         </div>
         <Button>Send message</Button>

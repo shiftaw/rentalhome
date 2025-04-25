@@ -9,4 +9,5 @@ PyJWT>=2.8.0
 python-dotenv
 python-dotenv
 colorama>=0.4.6
+python-multipart
 

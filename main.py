@@ -8,7 +8,6 @@ from routers import (  # properties, bookings, payments, messages
     auth,
     message,
     rent,
-    record,
 )
 
 # Initialize FastAPI App
@@ -23,18 +22,18 @@ async def log_requests(request: Request, call_next):
 
     # Log Request
     body = await request.body()
-    logger.info(
+    """ logger.info(
         f"Incoming request: {request.method} {request.url}\nHeaders: {request.headers}\nBody: {body.decode('utf-8') if body else 'No Body'}"
-    )
-
+        )
+        """
     # Process the request
     response = await call_next(request)
 
     # Log Response
     process_time = time.time() - start_time
-    logger.info(
+    """ logger.info(
         f"Outgoing response: {response.status_code}\nHeaders: {response.headers}\nProcess Time: {process_time:.4f}s"
-    )
+    ) """
 
     return response
 
@@ -60,7 +59,6 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
 app.include_router(message.router, prefix="/messages", tags=["Messages"])
 app.include_router(rent.router, prefix="/api/rent", tags=["Rent"])
-app.include_router(record.router, prefix="/api/record", tags=["Rent"])
 
 
 # Root Endpoint (Health Check)
