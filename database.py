@@ -1,5 +1,6 @@
 import logging
 import os
+from pymongo import MongoClient, ASCENDING
 
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -34,3 +35,10 @@ bookings_collection = db["bookings"]
 payments_collection = db["payments"]
 messages_collection = db["messages"]
 rent_collection = db["rent"]
+places = db['places']
+
+# Create UNIQUE index on city + country
+places.create_index(
+    [("city", ASCENDING), ("country", ASCENDING)],
+    unique=True
+)

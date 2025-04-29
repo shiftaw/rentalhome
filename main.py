@@ -8,6 +8,7 @@ from routers import (  # properties, bookings, payments, messages
     auth,
     message,
     rent,
+    country
 )
 
 # Initialize FastAPI App
@@ -59,9 +60,14 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
 app.include_router(message.router, prefix="/messages", tags=["Messages"])
 app.include_router(rent.router, prefix="/api/rent", tags=["Rent"])
+app.include_router(country.router, prefix="/api/country", tags=["country"])
+
 
 
 # Root Endpoint (Health Check)
 @app.get("/")
 def home():
     return {"message": "Welcome to the House Rent API!"}
+
+
+
