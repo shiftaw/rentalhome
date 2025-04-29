@@ -16,7 +16,6 @@ class UserRegister(BaseModel):
 
 @router.post("/register")
 def register_user(user: UserRegister):
-    print(user)
     if users_collection.find_one({"email": user.email}):
         raise HTTPException(status_code=400, detail="Email already exists")
 

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from bson import ObjectId  # bson = binary JSON, the data format used by MongoDB
 from pymongo.collection import Collection
@@ -11,6 +12,8 @@ class MyJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)  # this will return the ID as a string
+        if isinstance(o, datetime):
+            return o.isoformat()
         return json.JSONEncoder.default(self, o)
 
 

@@ -2,22 +2,34 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import AddItem from './AddItem'
+import PopularCity from './PopularCity'
 
 const Home = () => {
   const [properties, setProperties] = useState([])
+  const [cities, setCities] = useState([])
 
   const fetch_data = async () => {
     try {
       const response = await axios.get('/api/rent/all')
-      console.log(JSON.parse(response.data))
       setProperties(JSON.parse(response.data))
     } catch (error) {
       console.error('There was an error fetching the properties!', error)
     }
+    // /api/country/all
   }
 
+  const fetch_cities = async () => {
+    try {
+      const response = await axios.get('/api/country/all')
+      setCities(JSON.parse(response.data))
+    } catch (error) {
+      console.error('There was an error fetching the properties!', error)
+    }
+    // /api/country/all
+  }
   useEffect(() => {
     fetch_data()
+    fetch_cities()
   }, [])
 
   return (
@@ -81,19 +93,15 @@ const Home = () => {
         <div className=' text-gray-950 text-2xl font-semibold  mb-4 '>
           Popular cities
         </div>
-        <div className='flex  flex-col mb-8    '>
-          <div className='flex gap-x-2  '>
-            <img className=' w-[49%] rounded-t' src='./img/Kobenhavn.png'></img>
-            <img className=' w-[49%] rounded-t' src='./img/Aarhus.jpeg'></img>
-          </div>
-          <div className='flex  w-full   gap-x-2 rounded-b overflow-clip '>
-            <div className=' p-4 bg-white border w-[49%]  block text-l font-semibold ext-gray-950'>
-              Copenhagen
-            </div>
-            <div className='p-4 bg-white border  w-[49%]  text-l font-semibold text-gray-950'>
-              Aarhus
-            </div>
-          </div>
+        <div className='flex w-full overflow-x-auto'>
+          {cities.map((city) => {
+            return (
+              <PopularCity
+                city={city?.city}
+                img='./img/Kobenhavn.png'
+              ></PopularCity>
+            )
+          })}
         </div>
       </div>
       <div className='grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-8 sm:p-4 sm:gap-4 lg:grid-cols-4 lg:px-32'>

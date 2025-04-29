@@ -9,6 +9,11 @@ const NavBar = () => {
     setOpen(false)
   }
 
+  const signOut = () => {
+    localStorage.removeItem('token')
+    closeMenu()
+  }
+
   const onNavigateToLogin = () => {}
   return (
     <nav className='bg-gray-800'>
@@ -100,10 +105,11 @@ const NavBar = () => {
                   Projects
                 </a>
                 <a
+                  onClick={signOut}
                   href='#'
                   className='rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                 >
-                  Calendar
+                  Log out
                 </a>
               </div>
             </div>
@@ -208,11 +214,11 @@ const NavBar = () => {
               Projects
             </a>
             <a
-              onClick={closeMenu}
+              onClick={signOut}
               href='#'
               className='block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
             >
-              Calendar
+              Log out
             </a>
           </div>
         )}

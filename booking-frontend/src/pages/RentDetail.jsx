@@ -3,33 +3,7 @@ import clsx from 'clsx'
 import { useParams } from 'react-router'
 import { Button } from '../components/ui/button'
 import axios from 'axios'
-
-/*title: '',
-    rooms: '',
-    area: '',
-    month_rent: '',
-    deposit: '',
-    prepaid_rent: '',
-    sharable: false,
-    pets_allowed: false,
-    senior_friendly: false,
-    for_student_only: false,
-    elevator: false,
-    parking: false,
-    balcony: false,
-    charging_station: false,
-    dishwasher: false,
-    washing_machine: false,
-    tumbler_dryer: false,
-    refrigerator: false,
-    furnished: false,
-    digital_display: false,
-    message_via_app: false,
-    telephone_contact: false,
-    telephone_number: '',
-    description: '',
-    rent_period: '1 year',
-    available_from: '',*/
+import DateLabel from '@/components/DateLabel'
 
 const list = [
   { label: 'Monthly rent', value: '200 USD', key: 'month_rent' },
@@ -38,10 +12,9 @@ const list = [
 ]
 
 const list2 = [
-  { label: 'Monthly rent', value: '200Usd', key: 'month_rent' },
+  { label: 'Type', value: 'No', key: 'type' },
   { label: 'Size', value: '140 m²', key: 'area' },
   { label: 'Rooms', value: 'Two years', key: 'rooms' },
-  { label: 'Floor', value: '_', key: 'furnished' },
   { label: 'Furnished', value: 'No', key: 'furnished' },
   { label: 'Elevator', value: 'Yes', key: 'elevator' },
   { label: 'Balcony/ terrace', value: 'No', key: 'balcony' },
@@ -58,7 +31,6 @@ export default function RentDetail() {
   const fetch_data = async (id) => {
     try {
       const response = await axios.get(`/api/rent/detail/${id}`)
-      console.log(JSON.parse(response.data))
       setDetail(JSON.parse(response.data))
     } catch (error) {
       console.error('There was an error fetching the properties!', error)
@@ -72,9 +44,12 @@ export default function RentDetail() {
     if (key === 'available_from') {
       return new Date(value).toDateString()
     }
+    if (key == 'area') {
+      return value + ' m²'
+    }
 
+    if (key === 'month_rent') return value + ' USD'
     if (typeof value == 'boolean') {
-      console.log({ value })
       if (value) {
         return 'Yes'
       } else {
@@ -104,20 +79,23 @@ export default function RentDetail() {
   }
   return (
     <div
-      className=' flex flex-col items-center gap-2 bg-white  '
+      className=' flex flex-col  gap-2 bg-white  w-full '
       style={{ background: 'rgb(247, 247, 247)' }}
     >
       <div className='max-w-md bg-["rgb(247,247,247)"] border pb-16'>
-        <img src='/img/detail.png'></img>
+        <img
+          className='max-h-[300px] w-full object-cover'
+          src={detail?.image_url[0]}
+        ></img>
 
         <div className='py-2 px-4 mb-8'>
-          <div className='text-[#545454]'>7. april</div>
+          <div className='text-[#545454]'>
+            <DateLabel date={detail?.created_at}></DateLabel>
+          </div>
           <div className='pb-0 pt-3 font-bold text-xl text-[#1f1f1f]'>
-            4 bedroom hus på 140 m²
+            {detail?.rooms} rooms with {detail?.area} m²
           </div>
-          <div className='text-md pb-4 text-[#545454]'>
-            Kirkegyden, 5642 Millinge, Svanninge
-          </div>
+          <div className='text-md pb-4 text-[#545454]'>{detail?.address}</div>
           {list.map((item) => showList(item))}
           <h3 className='text-3xl pt-6 pb-1 font-bold'>Housing details</h3>
           <div className='w-[70px] h-[3px] bg-[#ff6633] mb-2'></div>
@@ -128,7 +106,7 @@ export default function RentDetail() {
         <div className='flex flex-col'>
           <div className='text-[12px] text-[#808080]'>Monthly rent</div>
           <div className='text-[28px] font-bold'>
-            {getValue('month_rent')} <span className='text-[12px]'>USD</span>
+            {getValue('month_rent')} <span className='text-[12px]'></span>
           </div>
         </div>
         <Button>Send message</Button>

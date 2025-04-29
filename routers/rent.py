@@ -1,44 +1,42 @@
+from pymongo.errors import DuplicateKeyError
 from bson import ObjectId
 from pydantic import BaseModel
-
-from database import rent_collection
+from database import rent_collection,places
 from database_access.dB_api import Db_api
-from fastapi import APIRouter,UploadFile, File, Form,Depends
+from fastapi import APIRouter, UploadFile, File, Form, Depends
 from utils.logger import logger
-from datetime import datetime
-import boto3
-from uuid import uuid4
-import os
+from utils.amazon_upload_image import upload_to_s3
 from typing import List
+from datetime import datetime
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
-db_api = Db_api(rent_collection)
+db_api_rent = Db_api(rent_collection)
+db_api_places = Db_api(places)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-s3 = boto3.client(
-    's3',
-    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    region_name=os.getenv("AWS_DEFAULT_REGION")
-)
-def upload_to_s3(file, bucket_name: str, folder: str = "rents"):
-    file_extension = file.filename.split(".")[-1]
-    key = f"{folder}/{uuid4()}.{file_extension}"
-    s3.upload_fileobj(file.file, bucket_name, key)
-    url = f"https://{bucket_name}.s3.amazonaws.com/{key}"
-    return url
+class User(BaseModel):
+    name: str
+    email: str
+   
+
+def get_current_user(token: str = Depends(oauth2_scheme)): 
+    # Decode and verify token here
+    print('token',token)
+    print( User(name='test',email="email"))
+    return  User(name='test',email="email")
 
 class Rent(BaseModel):
-
     title: str
     description: str
     area: int
     deposit: int
     month_rent: int
-    prepaid_rent: int
     rooms: int
     rent_period: str
-
     balcony: bool
     charging_station: bool
     digital_display: bool
@@ -55,17 +53,19 @@ class Rent(BaseModel):
     telephone_contact: bool
     tumbler_dryer: bool
     washing_machine: bool
-    
+    type:str
+    available_from:str
+    status : bool
+    address:str
+
 def parse_rent_form(
     title: str = Form(...),
     description: str = Form(...),
     area: int = Form(...),
     deposit: int = Form(...),
     month_rent: int = Form(...),
-    prepaid_rent: int = Form(...),
     rooms: int = Form(...),
     rent_period: str = Form(...),
-
     balcony: bool = Form(...),
     charging_station: bool = Form(...),
     digital_display: bool = Form(...),
@@ -82,21 +82,18 @@ def parse_rent_form(
     telephone_contact: bool = Form(...),
     tumbler_dryer: bool = Form(...),
     washing_machine: bool = Form(...),
-    telephone_number: str = Form(""),
-    available_from: str = Form("")
-
+    available_from: str = Form(""),
+    type:str = Form("Villa"),
+    address:str = Form("")
 ) -> Rent:
-
     return Rent(
         title=title,
         description=description,
         rooms=rooms,
         area=area,
         month_rent=month_rent,
-        prepaid_rent=prepaid_rent,
         deposit=deposit,
         rent_period=rent_period,
-        status=False,
         available_from=available_from,
         sharable=sharable,
         pets_allowed=pets_allowed,
@@ -106,18 +103,33 @@ def parse_rent_form(
         parking=parking,
         balcony=balcony,
         charging_station=charging_station,
-
         dishwasher=dishwasher,
         washing_machine=washing_machine,
         tumbler_dryer=tumbler_dryer,
         refrigerator=refrigerator,
         furnished=furnished,
-
         digital_display=digital_display,
         message_via_app=message_via_app,
         telephone_contact=telephone_contact,
-        telephone_number=telephone_number
+        type = type,
+        status = False,
+        address= address
     )
+
+def add_or_increment_place(city, country):
+    result = places.update_one(
+        {"city": city, "country": country},
+        {
+            "$inc": {"counter": 1},
+            "$setOnInsert": {"city": city, "country": country}
+        },
+        upsert=True
+    )
+    
+    if result.upserted_id:
+        print(f"Inserted new place: {city}, {country}")
+    else:
+        print(f"Incremented counter for: {city}, {country}")
 
 @router.get("/test")
 def test():
@@ -125,32 +137,46 @@ def test():
 
 
 @router.post("/create")
-async def create_new_rent(rent_data: Rent = Depends(parse_rent_form),images: List[UploadFile] = File(...)):
+async def create_new_rent(
+    rent_data: Rent = Depends(parse_rent_form), 
+    images: List[UploadFile] = File(...),
+    user: User = Depends(get_current_user)
+):
+    print('user',user)
     current_rent = rent_data.dict()
     current_rent["_id"] = ObjectId()
 
     # Upload to S3
-    image_url = [ upload_to_s3(image, bucket_name="danielshenkutie") for image in images]
+    image_url = [upload_to_s3(image, bucket_name="danielshenkutie") for image in images]
     current_rent["image_url"] = image_url
+    current_rent["created_at"] = datetime.utcnow().isoformat()
+    address = rent_data.address.split(',')
+    city,country = address[-2:]
+    add_or_increment_place(city,country)
 
     # Save in DB
-    result = db_api.insert_one(current_rent)
-    return {"success": "ok", "error": "", "rent_id": str(current_rent["_id"]), "image_url": image_url}
-
+    result = db_api_rent.insert_one(current_rent)
+    return {
+        "success": "ok",
+        "error": "",
+        "rent_id": str(current_rent["_id"]),
+        "image_url": image_url,
+    }
 
 
 @router.get("/all")
 def get_all():
-    all_rents = db_api.get_all()
-    #logger.debug(all_rents)
-    return all_rents
+    all_rents = db_api_rent.get_all()
+    print(all_rents)
+    # logger.debug(all_rents)
+    return  all_rents
+
 
 
 @router.get("/detail/{id}")
-def get_detail(id:str):
+def get_detail(id: str):
     obj_id = ObjectId(id)
     print(id)
-    item = db_api.find_one({"_id":obj_id})
+    item = db_api_rent.find_one({"_id": obj_id})
     logger.debug(item)
     return item
-
