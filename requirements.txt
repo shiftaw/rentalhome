@@ -10,4 +10,5 @@ python-dotenv
 python-dotenv
 colorama>=0.4.6
 python-multipart
+boto3
 
