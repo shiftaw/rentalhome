@@ -1,14 +1,16 @@
 import time
-
+import os
 from starlette.responses import JSONResponse
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routers import (  # properties, bookings, payments, messages
     auth,
     message,
     rent,
-    country
+    country,
 )
 
 # Initialize FastAPI App
@@ -64,10 +66,15 @@ app.include_router(country.router, prefix="/api/country", tags=["country"])
 
 
 
-# Root Endpoint (Health Check)
-@app.get("/")
-def home():
-    return {"message": "Welcome to the House Rent API!"}
 
+# Path to Vite build
+vite_build_path = os.path.join("booking-frontend", "dist")
 
+# Serve static assets (JS, CSS, etc.)
+app.mount("/assets", StaticFiles(directory=os.path.join(vite_build_path, "assets")), name="assets")
 
+# Serve the React/Vite index.html for all other routes
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    index_path = os.path.join(vite_build_path, "index.html")
+    return FileResponse(index_path)

@@ -44,7 +44,9 @@ def login(user_data: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_jwt_token({"user_id": str(user["_id"])})
-    return {"access_token": token}
+    del user["password"]
+    user["_id"] = str(user["_id"])
+    return {"access_token": token, "user": user}
 
 
 @router.get("/test")

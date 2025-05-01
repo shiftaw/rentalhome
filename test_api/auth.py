@@ -26,12 +26,12 @@ def register(new_user):
     return response
 
 
-if __name__ =="__main__":
-    print('main')
+if __name__ == "__main__":
+    print("main")
     new_user = {
-    "email": "samra@gmail.com",
-    "name": "Samra",
-    "password": "password",
-    "is_owner": True,
+        "email": "samra@gmail.com",
+        "name": "Samra",
+        "password": "password",
+        "is_owner": True,
     }
-    register( new_user)
+    register(new_user)

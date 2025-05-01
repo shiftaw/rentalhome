@@ -35,10 +35,7 @@ bookings_collection = db["bookings"]
 payments_collection = db["payments"]
 messages_collection = db["messages"]
 rent_collection = db["rent"]
-places = db['places']
+places = db["places"]
 
 # Create UNIQUE index on city + country
-places.create_index(
-    [("city", ASCENDING), ("country", ASCENDING)],
-    unique=True
-)
+places.create_index([("city", ASCENDING), ("country", ASCENDING)], unique=True)

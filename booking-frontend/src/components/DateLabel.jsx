@@ -18,7 +18,7 @@ export default function DateLabel({ date }) {
   const d = new Date()
   return (
     <div>
-      {d.getDate()}.{monthNames[d.getMonth()]}
+      {monthNames[d.getMonth()]} {d.getDate()}
     </div>
   )
 }

@@ -31,6 +31,7 @@ export default function RentDetail() {
   const fetch_data = async (id) => {
     try {
       const response = await axios.get(`/api/rent/detail/${id}`)
+      console.log(JSON.parse(response.data))
       setDetail(JSON.parse(response.data))
     } catch (error) {
       console.error('There was an error fetching the properties!', error)
@@ -79,10 +80,10 @@ export default function RentDetail() {
   }
   return (
     <div
-      className=' flex flex-col  gap-2 bg-white  w-full '
+      className=' flex flex-col  gap-2 bg-white  w-full items-center '
       style={{ background: 'rgb(247, 247, 247)' }}
     >
-      <div className='max-w-md bg-["rgb(247,247,247)"] border pb-16'>
+      <div className='w-[393px] bg-["rgb(247,247,247)"] border pb-16'>
         <img
           className='max-h-[300px] w-full object-cover'
           src={detail?.image_url[0]}
@@ -97,11 +98,18 @@ export default function RentDetail() {
           </div>
           <div className='text-md pb-4 text-[#545454]'>{detail?.address}</div>
           {list.map((item) => showList(item))}
+          <div className='py-8 pb-4'>
+            <span className='font-bold text-xl text-[#1f1f1f]'>
+              Description
+            </span>
+            <p className='font-light  text-[#1f1f1f]'>{detail?.description}</p>
+          </div>
           <h3 className='text-3xl pt-6 pb-1 font-bold'>Housing details</h3>
           <div className='w-[70px] h-[3px] bg-[#ff6633] mb-2'></div>
           {list2.map((item) => showList(item, true))}
         </div>
       </div>
+
       <div className='bg-white py-4 fixed bottom-0 w-full px-4 flex justify-between items-center border-b-1 border-gray-300 shadow-[0_0px_0px_1px_rgba(0,0,0,0.1)]'>
         <div className='flex flex-col'>
           <div className='text-[12px] text-[#808080]'>Monthly rent</div>

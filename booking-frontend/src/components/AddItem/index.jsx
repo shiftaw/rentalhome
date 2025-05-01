@@ -12,6 +12,7 @@ export default function AddItem(house) {
     type = 'Apartment/Condo',
     image_url,
     created_at,
+    address,
   } = house
   return (
     <Link to={`/detail/${_id}`}>
@@ -25,8 +26,8 @@ export default function AddItem(house) {
           <div className='text-l pb-1 text-[#1F1F1F] font-semibold'>
             {rooms} rooms {type} with {area}m²
           </div>
-          <div className='text-sm pb-1 text-[#7D7D7D] '>
-            Aarhus C,Harald Jensens Plads
+          <div className='font-light text-sm pb-1 text-[#7D7D7D] '>
+            {address}
           </div>
           <div className='flex justify-between py-2 font-semibold text-[#1F1F1F]'>
             <span>{month_rent}kr</span>

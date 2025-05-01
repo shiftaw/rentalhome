@@ -47,11 +47,11 @@ def decode_jwt_token(token: str):
         return None
     except jwt.InvalidTokenError:
         return None
-    
+
 
 # This function will be used in your routes
 async def get_current_user2(
-    token:str,
+    token: str,
 ):
     payload = decode_jwt_token(token)
     if not payload:
@@ -75,6 +75,3 @@ async def get_current_user2(
         )
 
     return user
-
-
-

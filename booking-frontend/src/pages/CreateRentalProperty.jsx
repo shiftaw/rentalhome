@@ -68,7 +68,6 @@ export default function CreateRentalProperty() {
     axios
       .post('/api/rent/create', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`, // Don't set this manually, Axios will do it automatically
         },
       })

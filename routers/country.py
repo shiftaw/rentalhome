@@ -7,6 +7,7 @@ router = APIRouter()
 
 Dba_api_place = Db_api(places)
 
+
 @router.get("/all")
 def get_all_countries():
     cities = Dba_api_place.get_all()
