@@ -5,10 +5,10 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   server: {
-    host: true,
+    host: false,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: 'https://rentalhome-i7wr.onrender.com',
         changeOrigin: true,
         secure: false,
       },
