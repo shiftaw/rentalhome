@@ -56,7 +56,7 @@ app.add_middleware(
 )
 
 # Register Routers (APIs)
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 # app.include_router(properties.router, prefix="/properties", tags=["Properties"])
 # app.include_router(bookings.router, prefix="/bookings", tags=["Bookings"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
