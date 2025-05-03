@@ -1,11 +1,16 @@
+from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import Optional
+from pymongo import DESCENDING,ASCENDING
 
 from bson import ObjectId
-from pydantic import BaseModel
 
 from database import messages_collection
 from fastapi import APIRouter, Depends, HTTPException
 from utils.auth import decode_jwt_token  # JWT Helper
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 router = APIRouter()
 
@@ -14,19 +19,24 @@ router = APIRouter()
 class MessageCreate(BaseModel):
     receiver_id: str
     content: str
+    timestamp: Optional[datetime] = Field(default_factory=datetime.utcnow)
 
 
 # Middleware: Get Current User from JWT
-def get_current_user(token: str = Depends(decode_jwt_token)):
+def get_current_user(token: str = Depends(oauth2_scheme)):
     if not token:
         raise HTTPException(status_code=401, detail="Invalid token or expired session")
-    return token
+    payload = decode_jwt_token(token)
+    print(payload)
+    return payload
 
 
 # 1️⃣ Send a Message
-@router.post("/messages")
+@router.post("/send")
 def send_message(message: MessageCreate, user: dict = Depends(get_current_user)):
+    print('user',user)
     new_message = {
+        "_id":ObjectId(),
         "sender_id": user["user_id"],
         "receiver_id": message.receiver_id,
         "content": message.content,
@@ -38,29 +48,52 @@ def send_message(message: MessageCreate, user: dict = Depends(get_current_user))
     return {"message": "Message sent", "message_id": str(result.inserted_id)}
 
 
-# 2️⃣ Get Messages for Current User
-@router.get("/messages")
-def get_messages(user: dict = Depends(get_current_user)):
-    print("user", user)
+# Get all messages where the user is either sender or receiver
+@router.get("/conversations/{user_id}")
+def get_conversations(user_id: str):
+    messages = messages_collection.find({
+        "$or": [
+            {"sender_id": user_id},
+            {"receiver_id": user_id}
+        ]
+    }).sort("timestamp", DESCENDING)
+    seen = set()
+    conversations = []
 
-    user_messages = list(
-        messages_collection.find(
-            {
-                "$or": [
-                    {"sender_id": user["user_id"]},
-                    {"receiver_id": user["user_id"]},
-                ]
-            }
-        )
-    )
+    for msg in messages:
+        sender = msg["sender_id"]
+        receiver = msg["receiver_id"]
+        other_user = receiver if sender == user_id else sender
 
-    for msg in user_messages:
-        msg["_id"] = str(msg["_id"])
-        msg["sender_id"] = str(msg["sender_id"])
-        msg["receiver_id"] = str(msg["receiver_id"])
+        if other_user not in seen:
+            conversations.append({
+                "user_id": other_user,
+                "last_message": msg["content"],
+                "timestamp": msg["timestamp"]
+            })
+            seen.add(other_user)
 
-    return user_messages
+    return conversations
 
+@router.get("/chat/{user1_id}/{user2_id}")
+def get_chat_history(user1_id: str, user2_id: str):
+    messages = messages_collection.messages.find({
+        "$or": [
+            {"sender_id": user1_id, "receiver_id": user2_id},
+            {"sender_id": user2_id, "receiver_id": user1_id}
+        ]
+    }).sort("timestamp", ASCENDING)
+
+    chat = []
+    for msg in messages:
+        chat.append({
+            "sender_id": msg["sender_id"],
+            "receiver_id": msg["receiver_id"],
+            "content": msg["content"],
+            "timestamp": msg["timestamp"]
+        })
+
+    return chat
 
 # 3️⃣ Delete a Message
 @router.delete("/messages/{message_id}")

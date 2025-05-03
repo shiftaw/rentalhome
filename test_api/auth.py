@@ -27,11 +27,4 @@ def register(new_user):
 
 
 if __name__ == "__main__":
-    print("main")
-    new_user = {
-        "email": "samra@gmail.com",
-        "name": "Samra",
-        "password": "password",
-        "is_owner": True,
-    }
-    register(new_user)
+   login({"email":"samra@gmail.com","password":"password"})
