@@ -12,12 +12,14 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import PageLoadingWrapper from './PageLoadingWrapper'
+import { useAuth } from '@/context/authContext'
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { setUser, setToken } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -28,6 +30,9 @@ export default function LoginPage() {
         password,
       })
       localStorage.setItem('token', response.data.access_token)
+      setUser(response.data.user)
+      setToken(response.data.access_token)
+
       localStorage.setItem('user', JSON.stringify(response.data.user))
       navigate('/')
       setIsLoading(false)

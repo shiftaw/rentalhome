@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { useParams } from 'react-router'
+import { useParams, Link } from 'react-router'
 import { Button } from '../components/ui/button'
 import axios from 'axios'
 import DateLabel from '@/components/DateLabel'
@@ -31,7 +31,6 @@ export default function RentDetail() {
   const fetch_data = async (id) => {
     try {
       const response = await axios.get(`/api/rent/detail/${id}`)
-      console.log(JSON.parse(response.data))
       setDetail(JSON.parse(response.data))
     } catch (error) {
       console.error('There was an error fetching the properties!', error)
@@ -59,7 +58,7 @@ export default function RentDetail() {
     }
     return value
   }
-
+  const handleSendMessage = () => {}
   useEffect(() => {
     const id = params.id
     fetch_data(id)
@@ -117,7 +116,9 @@ export default function RentDetail() {
             {getValue('month_rent')} <span className='text-[12px]'></span>
           </div>
         </div>
-        <Button>Send message</Button>
+        <Button onClick={handleSendMessage}>
+          <Link to={`/send/${detail?.host?._id}`}>Send message</Link>
+        </Button>
       </div>
     </div>
   )

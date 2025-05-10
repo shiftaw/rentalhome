@@ -8,7 +8,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'https://rentalhome-i7wr.onrender.com',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },

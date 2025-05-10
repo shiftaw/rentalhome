@@ -5,7 +5,7 @@ from pymongo import DESCENDING,ASCENDING
 
 from bson import ObjectId
 
-from database import messages_collection
+from database import messages_collection,users_collection
 from fastapi import APIRouter, Depends, HTTPException
 from utils.auth import decode_jwt_token  # JWT Helper
 from fastapi.security import OAuth2PasswordBearer
@@ -50,7 +50,7 @@ def send_message(message: MessageCreate, user: dict = Depends(get_current_user))
 
 # Get all messages where the user is either sender or receiver
 @router.get("/conversations/{user_id}")
-def get_conversations(user_id: str):
+async def get_conversations(user_id: str,):
     messages = messages_collection.find({
         "$or": [
             {"sender_id": user_id},
@@ -63,21 +63,32 @@ def get_conversations(user_id: str):
     for msg in messages:
         sender = msg["sender_id"]
         receiver = msg["receiver_id"]
-        other_user = receiver if sender == user_id else sender
+        other_user_id = receiver if sender == user_id else sender
 
-        if other_user not in seen:
+        if other_user_id not in seen:
+            print('other_user_id',other_user_id)
+            # Get user info for the other user
+            other_user = users_collection.find_one({"_id": ObjectId(other_user_id)})
+            print(other_user)
+            name = other_user.get("name", "Unknown") if other_user else "Unknown"
             conversations.append({
-                "user_id": other_user,
+                "name":name,
+                "user_id": other_user_id,
                 "last_message": msg["content"],
-                "timestamp": msg["timestamp"]
+                "timestamp": msg["timestamp"],
+                "last_message_sender_id": msg["sender_id"],
+                "receiver" : msg["receiver_id"]
+
             })
-            seen.add(other_user)
+            seen.add(other_user_id)
+    print('messages',conversations)
 
     return conversations
 
 @router.get("/chat/{user1_id}/{user2_id}")
 def get_chat_history(user1_id: str, user2_id: str):
-    messages = messages_collection.messages.find({
+    print('user1_id',user1_id, 'user2_id',user2_id)
+    messages = messages_collection.find({
         "$or": [
             {"sender_id": user1_id, "receiver_id": user2_id},
             {"sender_id": user2_id, "receiver_id": user1_id}
@@ -92,6 +103,8 @@ def get_chat_history(user1_id: str, user2_id: str):
             "content": msg["content"],
             "timestamp": msg["timestamp"]
         })
+
+    print('chat',len(chat))
 
     return chat
 

@@ -9,21 +9,38 @@ import AuthContextProvider from './context/authContext'
 import CreateRentalProperty from './pages/CreateRentalProperty'
 import RentDetail from './pages/RentDetail'
 import RegisterPage from './pages/RegisterPage'
+import MessagesPage from './pages/MessagesPage'
+import SendMEssage from './pages/SendMEssage'
+import ConversationList from './components/ConversationList'
+import Chat from './pages/Chat'
 
 function App() {
   return (
     <AuthContextProvider>
       <Router cla>
-        <NavBar />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/new_property' element={<CreateRentalProperty />} />
-          <Route path='/detail/:id' element={<RentDetail />}></Route>
-          <Route path='/book/:id' element={<BookingPage />} />
-          <Route path='/reviews/:id' element={<ReviewPage />} />
-        </Routes>
+        <div className='h-[calc(100dvh-80px)]'>
+          <NavBar />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/new_property' element={<CreateRentalProperty />} />
+            <Route path='/detail/:id' element={<RentDetail />}></Route>
+            <Route path='/book/:id' element={<BookingPage />} />
+            <Route path='/reviews/:id' element={<ReviewPage />} />
+            <Route path='/conversations' element={<ConversationList />} />
+            <Route path='/chat/:id' element={<Chat></Chat>} />
+
+            <Route
+              path='/send/:id'
+              element={<SendMEssage></SendMEssage>}
+            ></Route>
+            <Route
+              path='/messages'
+              element={<MessagesPage></MessagesPage>}
+            ></Route>
+          </Routes>
+        </div>
       </Router>
     </AuthContextProvider>
   )

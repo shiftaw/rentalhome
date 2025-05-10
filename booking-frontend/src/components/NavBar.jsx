@@ -20,7 +20,6 @@ const NavBar = () => {
 
   useEffect(() => {
     const user = localStorage.getItem('user')
-    console.log({ user })
     if (user) {
       setUser(JSON.parse(user))
     }
@@ -28,7 +27,7 @@ const NavBar = () => {
 
   const onNavigateToLogin = () => {}
   return (
-    <nav className='bg-gray-800'>
+    <nav className='bg-gray-800 ' style={{ zIndex: 10000 }}>
       <div className='mx-auto max-w-7xl px-2 sm:px-2 lg:px-2'>
         <div className='relative flex h-16 items-center justify-between'>
           <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
@@ -108,12 +107,13 @@ const NavBar = () => {
                 >
                   Team
                 </a>
-                <a
-                  href='#'
+                <Link
+                  onClick={closeMenu}
+                  to='/messages'
                   className='rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                 >
-                  Projects
-                </a>
+                  Messages
+                </Link>
                 <a
                   onClick={signOut}
                   href='#'
@@ -196,13 +196,13 @@ const NavBar = () => {
             >
               Team
             </a>
-            <a
+            <Link
               onClick={closeMenu}
-              href='#'
-              className='block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+              to='/messages'
+              className='rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
             >
-              Projects
-            </a>
+              Messages
+            </Link>
             <a
               onClick={signOut}
               href='#'
