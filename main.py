@@ -56,11 +56,11 @@ app.add_middleware(
 )
 
 # Register Routers (APIs)
-app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 # app.include_router(properties.router, prefix="/properties", tags=["Properties"])
 # app.include_router(bookings.router, prefix="/bookings", tags=["Bookings"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
-app.include_router(message.router, prefix="/api/messages", tags=["Messages"])
+app.include_router(message.router, prefix="/messages", tags=["Messages"])
 app.include_router(rent.router, prefix="/api/rent", tags=["Rent"])
 app.include_router(country.router, prefix="/api/country", tags=["country"])
 
@@ -72,6 +72,7 @@ vite_build_path = os.path.join("booking-frontend", "dist")
 
 # Serve static assets (JS, CSS, etc.)
 app.mount("/assets", StaticFiles(directory=os.path.join(vite_build_path, "assets")), name="assets")
+app.mount("/img", StaticFiles(directory=os.path.join(vite_build_path, "img")), name="assets")
 
 # Serve the React/Vite index.html for all other routes
 @app.get("/{full_path:path}")
