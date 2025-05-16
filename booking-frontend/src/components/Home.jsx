@@ -76,7 +76,7 @@ const Home = () => {
             return (
               <PopularCity
                 city={city?.city}
-                img='/img/Kobenhavn.png'
+                img='img/Kobenhavn.png'
               ></PopularCity>
             )
           })}
