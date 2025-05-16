@@ -10,10 +10,10 @@ export default function Message({ message, isYours }) {
       <div
         className={clsx(
           ' w-fit',
-          'text-md p-2 pl-4 ',
+          'text-md p-2 pl-4 pr-4 rounded-full',
           isYours
-            ? 'bg-teal-600 text-white text-right rounded-r-2xl rounded-l-full'
-            : 'bg-slate-100 text-left rounded-full p-2 pr-4'
+            ? 'bg-teal-600 text-white text-right  '
+            : 'bg-slate-100 text-left  p-2 pr-4'
         )}
       >
         {message}

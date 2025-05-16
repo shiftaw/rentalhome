@@ -11,7 +11,7 @@ const Home = () => {
 
   const fetch_data = async () => {
     try {
-      const response = await axios.get('/api/rent/all')
+      const response = await axios.get('/api/rent/')
       setProperties(JSON.parse(response.data))
     } catch (error) {
       console.error('There was an error fetching the properties!', error)

@@ -12,7 +12,7 @@ const ConversationList = ({ conversations, currentUserId, onSelect }) => {
           : conv.last_message_sender_id
 
         return (
-          <Link to={'/chat/' + other_user}>
+          <Link to={'/messages/' + other_user}>
             <div
               role='button'
               className=' bg-gray-100 text-slate-800 flex w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100'

@@ -3,17 +3,16 @@ import React, { createContext, useState, useEffect, useContext } from 'react'
 const AuthContext = createContext(null)
 
 const AuthContextProvider = ({ children }) => {
-  const [isLogged, setLogged] = useState(true)
+  const [isLogged, setLogged] = useState(false)
   const [user, setUser] = useState({})
   const [token, setToken] = useState(null)
 
   useEffect(() => {
-    //localStorage.setItem("lastname", "Smith");
-    const token = localStorage.getItem('token')
     if (token) {
       setLogged(true)
+      console.log('response', 'trigger')
     }
-  }, [])
+  }, [token])
 
   return (
     <AuthContext.Provider

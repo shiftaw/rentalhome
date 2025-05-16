@@ -12,18 +12,9 @@ const NavBar = () => {
   }
 
   const signOut = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-
+    setLogged(false)
     closeMenu()
   }
-
-  useEffect(() => {
-    const user = localStorage.getItem('user')
-    if (user) {
-      setUser(JSON.parse(user))
-    }
-  }, [])
 
   const onNavigateToLogin = () => {}
   return (

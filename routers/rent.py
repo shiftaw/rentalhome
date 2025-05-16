@@ -197,12 +197,22 @@ async def create_new_rent(
     }
 
 
-@router.get("/all")
+@router.get("/")
 def get_all():
     all_rents = db_api_rent.get_all()
     print(all_rents)
     # logger.debug(all_rents)
     return all_rents
+
+@router.get("/{city}/")
+def get_all(city:str):
+    all_rents = db_api_rent.get_all({
+    "address": { "$regex": city, "$options": "i" }
+})
+    print(all_rents)
+    # logger.debug(all_rents)
+    return all_rents
+
 
 
 @router.get("/detail/{id}")

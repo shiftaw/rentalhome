@@ -1,9 +1,12 @@
 import { Navigate } from 'react-router-dom'
+import { useAuth } from './context/authContext'
 
 export function RequireAuth({ children }) {
-  const isLoggedIn = !!localStorage.getItem('token')
+  const { isLogged } = useAuth()
 
-  if (!isLoggedIn) {
+  console.log({ isLogged })
+
+  if (!isLogged) {
     return <Navigate to='/login' replace />
   }
 

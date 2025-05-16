@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ConversationList from '../components/ConversationList'
 import axios from 'axios'
 import { useAuth } from '@/context/authContext'
+import { RequireAuth } from '@/ProtectedRoute'
 
 export default function MessagesPage() {
   const [conversations, setConversations] = useState([])
@@ -18,12 +19,14 @@ export default function MessagesPage() {
       })
   }, [user])
   return (
-    <div className='h-full w-full h-min-screen'>
-      <ConversationList
-        conversations={conversations}
-        currentUserId={user._id}
-        onSelect={(userId) => console.log('Open chat with', userId)}
-      />
-    </div>
+    <RequireAuth>
+      <div className='h-full w-full h-min-screen'>
+        <ConversationList
+          conversations={conversations}
+          currentUserId={user._id}
+          onSelect={(userId) => console.log('Open chat with', userId)}
+        />
+      </div>
+    </RequireAuth>
   )
 }

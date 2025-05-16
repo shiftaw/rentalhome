@@ -19,7 +19,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { setUser, setToken } = useAuth()
+  const { setUser, setToken, setLogged } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,11 +29,10 @@ export default function LoginPage() {
         email,
         password,
       })
-      localStorage.setItem('token', response.data.access_token)
+      console.log({ response })
       setUser(response.data.user)
       setToken(response.data.access_token)
-
-      localStorage.setItem('user', JSON.stringify(response.data.user))
+      setLogged(true)
       navigate('/')
       setIsLoading(false)
     } catch (error) {
