@@ -11,12 +11,10 @@ export default function MessagesPage() {
 
   useEffect(() => {
     //127.0.0.1:8000/api/messages/conversations/{id}
-    axios
-      .get('http://127.0.0.1:8000/api/messages/conversations/' + user._id)
-      .then((response) => {
-        setConversations(response.data)
-        console.log('response.data', response.data)
-      })
+    axios.get('/api/messages/conversations/' + user._id).then((response) => {
+      setConversations(response.data)
+      console.log('response.data', response.data)
+    })
   }, [user])
   return (
     <RequireAuth>

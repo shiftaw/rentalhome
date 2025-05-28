@@ -213,6 +213,16 @@ def get_all(city:str):
     # logger.debug(all_rents)
     return all_rents
 
+@router.get("/type/{type}")
+def get_all(type:str):
+    print('type',type)
+    all_rents = db_api_rent.get_all(
+    {"type": type}
+)
+    print(all_rents)
+    # logger.debug(all_rents)
+    return all_rents
+
 
 
 @router.get("/detail/{id}")

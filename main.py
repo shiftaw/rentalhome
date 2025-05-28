@@ -1,9 +1,8 @@
 import time
 import os
 from starlette.responses import JSONResponse
-
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse,RedirectResponse
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routers import (  # properties, bookings, payments, messages
@@ -54,13 +53,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/api/apartment", include_in_schema=False)
+@app.get("/api/apartment/", include_in_schema=False)
+def redirect_apartment():
+    return RedirectResponse(url="/api/rent/type/Apartment")
 
+@app.get("/api/house", include_in_schema=False)
+@app.get("/api/house/", include_in_schema=False)
+def redirect_house():
+    return RedirectResponse(url="/api/rent/type/House")
 # Register Routers (APIs)
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 # app.include_router(properties.router, prefix="/properties", tags=["Properties"])
 # app.include_router(bookings.router, prefix="/bookings", tags=["Bookings"])
 # app.include_router(payments.router, prefix="/payments", tags=["Payments"])
-app.include_router(message.router, prefix="/messages", tags=["Messages"])
+app.include_router(message.router, prefix="/api/messages", tags=["Messages"])
 app.include_router(rent.router, prefix="/api/rent", tags=["Rent"])
 app.include_router(country.router, prefix="/api/country", tags=["country"])
 

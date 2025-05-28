@@ -29,7 +29,6 @@ export default function LoginPage() {
         email,
         password,
       })
-      console.log({ response })
       setUser(response.data.user)
       setToken(response.data.access_token)
       setLogged(true)

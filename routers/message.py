@@ -51,6 +51,7 @@ def send_message(message: MessageCreate, user: dict = Depends(get_current_user))
 # Get all messages where the user is either sender or receiver
 @router.get("/conversations/{user_id}")
 async def get_conversations(user_id: str,):
+    print('user_id',user_id)
     messages = messages_collection.find({
         "$or": [
             {"sender_id": user_id},

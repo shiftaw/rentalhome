@@ -15,6 +15,7 @@ import ConversationList from './components/ConversationList'
 import Chat from './pages/Chat'
 import CountryApartmentList from './pages/CountryApartmentList'
 import Breadcrumbs from './components/Breadcrumbs'
+import NavWithProfile from './components/NavWithProfile'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Router cla>
         <div className='h-[calc(100dvh-80px)]'>
           <NavBar />
+          <NavWithProfile></NavWithProfile>
           <Breadcrumbs />
           <Routes>
             <Route path='/' element={<Home />} />
@@ -33,7 +35,22 @@ function App() {
             <Route path='/reviews/:id' element={<ReviewPage />} />
             <Route path='/conversations' element={<ConversationList />} />
             <Route path='/messages/:id/' element={<Chat></Chat>} />
-
+            <Route
+              path='/apartment/'
+              element={<CountryApartmentList></CountryApartmentList>}
+            />
+            <Route
+              path='/room/'
+              element={<CountryApartmentList></CountryApartmentList>}
+            />
+            <Route
+              path='/house/'
+              element={<CountryApartmentList></CountryApartmentList>}
+            />
+            <Route
+              path='/townhouse/'
+              element={<CountryApartmentList></CountryApartmentList>}
+            />
             <Route
               path='/rent/:city'
               element={<CountryApartmentList></CountryApartmentList>}
