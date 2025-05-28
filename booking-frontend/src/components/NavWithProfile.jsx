@@ -11,6 +11,7 @@ import {
 import clsx from 'clsx'
 import { useAuth } from '@/context/authContext'
 import { Link } from 'react-router-dom'
+import { CirclePlus, Plus } from 'lucide-react'
 
 export default function NavWithProfile() {
   const { isLogged, user, setLogged } = useAuth()
@@ -25,12 +26,19 @@ export default function NavWithProfile() {
   }
 
   return (
-    <div className='bg-gray-800 text-black'>
+    <div className='bg-gray-800 text-black '>
       <nav className='menubar flex w-full items-center justify-between p-4 pl-2'>
         <Link to='/'>
           <img className='w-60' src='/img/gojjologo.png'></img>
         </Link>
-        <ul className='w-full text-left mr-6'></ul>
+
+        <ul className='text-left mr-4'> </ul>
+        <div className='flex w-30 justify-center shrink-0 items-center text-white'>
+          <Link className='' to='/new_property'>
+            <Plus size={24} />
+          </Link>
+        </div>
+
         {isLogged ? (
           <img
             onClick={openCloseMenu}

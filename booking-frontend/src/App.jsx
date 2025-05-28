@@ -22,7 +22,6 @@ function App() {
     <AuthContextProvider>
       <Router cla>
         <div className='h-[calc(100dvh-80px)]'>
-          <NavBar />
           <NavWithProfile></NavWithProfile>
           <Breadcrumbs />
           <Routes>
